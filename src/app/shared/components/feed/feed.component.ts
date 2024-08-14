@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-feed',
-  standalone: true,
-  imports: [],
+  standalone: false,
   templateUrl: './feed.component.html',
   styleUrl: './feed.component.scss'
 })
