@@ -1,32 +1,45 @@
-<div class="bg-white p-4 rounded-lg shadow-lg max-w-md mx-auto mb-4">
+<div class="bg-white p-4 rounded-lg shadow-lg max-w-sm mx-auto mb-4">
   <!-- User Info -->
-  <div class="flex items-center mb-3">
-    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Andrei Balan" class="h-10 w-10 rounded-full mr-3">
-    <div>
-      <p class="text-gray-900 font-semibold">Andrei Balan</p>
-      <p class="text-gray-500 text-sm">10 min ago</p>
+  <div class="flex items-center justify-between mb-3">
+    <div class="flex items-center">
+      <img [src]="post.user.profileImageUrl" [alt]="post.user.firstName" class="h-10 w-10 rounded-full mr-3">
+      <div>
+        <p class="text-gray-900 font-semibold mb-0">{{post.user.firstName}} {{post.user.lastName}}</p>
+        <p class="text-gray-500 text-sm mb-0">{{post.createdAt| timeAgo}}</p>
+      </div>
+    </div>
+
+    <!-- Ellipsis Menu for Post Owner -->
+    <div *ngIf="isPostOwner" class="text-gray-500">
+
+        <i mat-icon-button [matMenuTriggerFor]="postMenu" class="fa-solid fa-ellipsis-vertical cursor-pointer"></i>
+
+      <mat-menu #postMenu="matMenu">
+        <button mat-menu-item (click)="editPost()">
+          <i class="fa-solid fa-edit mr-2"></i> Edit
+        </button>
+        <button mat-menu-item (click)="deletePost()">
+          <i class="fa-solid fa-trash-alt mr-2"></i> Delete
+        </button>
+      </mat-menu>
     </div>
   </div>
 
   <!-- Post Content -->
-  <p class="text-gray-800 mb-4">Careva la o bere prin Decebal centru?</p>
+  <p class="text-gray-800 mb-4">{{post.description}}</p>
 
   <!-- Interaction Icons -->
   <div class="flex items-center justify-between text-gray-500">
     <div class="flex items-center">
       <button (click)="participate()" class="text-green-500 mr-2">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-        </svg>
+        <i class="fa-solid fa-check"></i>
       </button>
-      <span class="mr-4">10</span>
+      <span class="mr-4">{{post.participationCount}}</span>
 
       <button class="text-gray-500 mr-2">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M17 8h2a2 2 0 012 2v8a2 2 0 01-2 2h-2m-4 0h-4a2 2 0 01-2-2v-8a2 2 0 012-2h4m4 0V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v3" />
-        </svg>
+        <i class="fa-solid fa-comment"></i>
       </button>
-      <span>15</span>
+      <span>{{post.commentsCount}}</span>
     </div>
   </div>
 </div>

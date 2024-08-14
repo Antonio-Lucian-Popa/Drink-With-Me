@@ -5,7 +5,7 @@
       <div class="flex justify-between h-16 items-center">
         <div class="flex">
           <!-- Mobile menu button -->
-          <button (click)="toggleSidebar()" class="lg:hidden text-gray-500 hover:text-gray-700 focus:outline-none">
+          <button (click)="toggleSidebar()" class="lg:hidden text-gray-500 hover:text-gray-700 focus:outline-none mr-3">
             <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
@@ -18,16 +18,56 @@
         </div>
         <!-- Search bar (hidden on mobile) -->
         <div class="hidden lg:flex flex-1 items-center justify-center">
-          <input class="w-full max-w-md px-4 py-2 border rounded-lg" type="text" placeholder="Search...">
+          <input class="w-full max-w-md px-4 py-2 border rounded-lg" type="text" placeholder="Search..." [formControl]="searchControl">
         </div>
         <!-- User and Notifications -->
         <div class="flex items-center space-x-4">
           <i class="fa-solid fa-location-dot"></i>
-          <span>Brasov, Romania</span>
-          <button class="text-gray-500 hover:text-gray-700 focus:outline-none">
-            <i class="fa-solid fa-bell"></i>
-          </button>
-          <img class="h-8 w-8 rounded-full" src="https://randomuser.me/api/portraits/men/32.jpg" alt="">
+          @if (!location) {
+            <span>Brasov, Romania</span>
+          } @else {
+            <span>{{ location!.city }}, {{ location!.country }}</span>
+          }
+
+          <!-- Notification Button -->
+          <div class="ml-4 flex items-center md:ml-6 relative">
+            <button type="button" (click)="toggleNotificationCard()"
+              class="rounded-full notification-btn p-1 d-flex justify-center align-items-center">
+              <span class="relative inline-block">
+                <!-- Notification Badge as a dot -->
+                @if (isNewNotifications) {
+                  <span class="absolute top-0 right-0 block h-2 w-2 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-red-600"></span>
+                }
+                <i class="fa-solid fa-bell"></i>
+              </span>
+            </button>
+          </div>
+
+          <!-- User Profile Dropdown -->
+          <div class="relative ml-3">
+            <div>
+              <button type="button"
+                class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm "
+                id="user-menu-button" aria-expanded="false" aria-haspopup="true" (click)="toggleDropdown()">
+                <span class="sr-only">Open user menu</span>
+                <img class="h-8 w-8 rounded-full" src="https://randomuser.me/api/portraits/men/32.jpg" alt="User Avatar">
+              </button>
+            </div>
+
+            <!-- Dropdown menu, show/hide based on menu state -->
+            @if (showDropdownUser) {
+              <div
+                class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+                <a (click)="openUserProfile()" class="block my-2 mx-4 text-sm text-gray-700 link-navigation no-underline cursor-pointer hover:bg-gray-100"
+                  role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
+                <a routerLink="/settings" class="block my-2 mx-4 text-sm text-gray-700 link-navigation no-underline cursor-pointer hover:bg-gray-100" role="menuitem"
+                  tabindex="-1" id="user-menu-item-1" (click)="closeDropDownUser()">Settings</a>
+                <a (click)="logOut()" class="block my-2 mx-4 text-sm text-gray-700 link-navigation no-underline cursor-pointer hover:bg-gray-100" role="menuitem"
+                  tabindex="-1" id="user-menu-item-2" (click)="closeDropDownUser()">Sign out</a>
+              </div>
+            }
+          </div>
         </div>
       </div>
     </div>
