@@ -1,0 +1,90 @@
+/* notifications-card.component.scss */
+.notifications-card {
+  background: #fff; // White background color
+  border-radius: 0.5rem;
+  padding: 1rem;
+  box-shadow: 0 2px 4px #eeeeee;
+  font-family: Arial, sans-serif; // Use your desired font
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    .close-btn {
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+  }
+
+  .tabs {
+    display: flex;
+    justify-content: space-between;
+
+    .tab {
+      font-weight: bold;
+      color: #333; // Dark text for better contrast
+    }
+  }
+
+  .notifications-list {
+    .notification {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .notification-message {
+        font-weight: bold;
+      }
+
+      .notification-date {
+        color: #666;
+        font-size: 0.875rem;
+      }
+
+      .notification-indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 9999px;
+        background-color: #ff0000;
+      }
+    }
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+
+    .mark-read-btn,
+    .view-all-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      background: #f3f3f3; // Light background for buttons
+      cursor: pointer;
+      border: none;
+
+      &:hover {
+        background: #e2e2e2; // Slightly darker on hover
+      }
+    }
+  }
+}
+
+
+.no-data-container {
+  img {
+    width: 5rem;
+  }
+}

@@ -1,1 +1,41 @@
-<p>create-post-dialog works!</p>
+<div class="create-post-dialog bg-white p-6 rounded-lg shadow-lg relative h-auto">
+  <!-- Header with Title and Close Button -->
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-xl font-semibold">Create Post</h2>
+    <button (click)="closeDialog()" class="text-gray-600 hover:text-gray-900">
+      <i class="fa fa-times text-xl"></i>
+    </button>
+  </div>
+
+  <div class="post-header flex items-center mb-4">
+    <!-- User Avatar (hidden on mobile) -->
+    <img [src]="userProfileImage" alt="{{ user.firstName }}'s avatar" class="user-avatar w-12 h-12 rounded-full object-cover mr-3 hidden sm:block">
+
+    <!-- Post Form -->
+    <form [formGroup]="postForm" class="flex-grow">
+      <textarea formControlName="description"
+                placeholder="What's on your mind, {{ user.firstName }}?"
+                class="post-textarea w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none min-h-[50px]"></textarea>
+    </form>
+
+    <button (click)="createPost()" class="submit-post-btn ml-4 bg-blue-600 text-white rounded-lg p-3 hover:bg-blue-700">
+      <i class="fa-solid fa-paper-plane"></i>
+    </button>
+  </div>
+
+  <!-- Image Upload Icon -->
+  <div class="image-upload flex items-center mt-4">
+    <i class="fa fa-image fa-lg text-gray-500 cursor-pointer mr-4" (click)="imageInput.click()"></i>
+    <input type="file" #imageInput (change)="onImageUpload($event)" multiple hidden>
+  </div>
+
+  <!-- Preview of Uploaded Images -->
+  <div class="image-preview mt-4 flex flex-wrap gap-4" *ngIf="images && images.length > 0">
+    <div *ngFor="let image of images; let i = index" class="preview-image relative">
+      <img [src]="image" alt="Image preview" class="rounded-md max-w-xs">
+      <button class="remove-image-btn absolute top-1 right-1 bg-black bg-opacity-60 rounded-full p-1 text-white" (click)="removeImage(i)">
+        <i class="fa fa-times-circle"></i>
+      </button>
+    </div>
+  </div>
+</div>

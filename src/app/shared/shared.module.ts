@@ -9,11 +9,16 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { TimeAgoPipe } from "./pipe/time-ago.pipe";
+import { NotificationCardComponent } from './components/notification-card/notification-card.component';
+import { CreatePostDialogComponent } from './components/post-create-input/create-post-dialog/create-post-dialog.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const NB_COMPONENTS: any[] = [
   PostCreateInputComponent,
   PostComponent,
-  PostListComponent
+  PostListComponent,
+  NotificationCardComponent,
+  CreatePostDialogComponent
 ];
 
 const NB_MODULES: any[] = [
@@ -22,6 +27,8 @@ const NB_MODULES: any[] = [
   MatMenuModule,
   MatIconModule,
   MatButtonModule,
+  ReactiveFormsModule,
+  FormsModule
 ];
 
 

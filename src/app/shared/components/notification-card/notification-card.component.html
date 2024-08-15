@@ -1,0 +1,26 @@
+<!-- notifications-card.component.html -->
+<div class="notifications-card bg-white rounded-lg p-4 shadow-lg">
+  <div class="card-header flex justify-between items-center mb-4">
+    <h3 class="text-lg font-semibold">Notifications</h3>
+    <button class="close-btn" (click)="closeNotificationCard()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+
+  <div class="notifications-list pt-3">
+    <!-- Repeat for each notification -->
+    <div class="notification flex items-center justify-between mb-3" *ngFor="let notification of notifications">
+      <div class="flex items-center">
+        <img [src]="notification.profileImageUrl" alt="User Avatar" class="user-avatar mr-3">
+        <div>
+          <p class="notification-message font-semibold mb-0">{{notification.message}}</p>
+          <p class="notification-date text-gray-600 mb-0">{{notification.createdAt | timeAgo}}</p>
+        </div>
+      </div>
+      <span class="notification-indicator bg-red-500 rounded-full" *ngIf="!notification.read"></span>
+    </div>
+
+    <div class="no-data-container d-flex flex-column align-items-center justify-center" *ngIf="notifications.length == 0">
+      <img src="/no-data.svg"class="mb-3" alt="no data">
+      <p class="text-gray-600">No notifications</p>
+    </div>
+  </div>
+</div>

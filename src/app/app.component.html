@@ -1,8 +1,8 @@
 <div class="min-h-screen flex flex-col">
   <!-- Top bar -->
-  <header class="bg-white shadow-md">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16 items-center">
+  <header class="main-content">
+    <div class="max-w-7xl mx-auto px-0 sm:px-0 lg:px-8 side-nav">
+      <div class="flex justify-between h-16 items-center mx-3">
         <div class="flex">
           <!-- Mobile menu button -->
           <button (click)="toggleSidebar()" class="lg:hidden text-gray-500 hover:text-gray-700 focus:outline-none mr-3">
@@ -18,54 +18,68 @@
         </div>
         <!-- Search bar (hidden on mobile) -->
         <div class="hidden lg:flex flex-1 items-center justify-center">
-          <input class="w-full max-w-md px-4 py-2 border rounded-lg" type="text" placeholder="Search..." [formControl]="searchControl">
+          <input class="w-full max-w-md px-4 py-2 border rounded-lg" type="text" placeholder="Search..."
+            [formControl]="searchControl">
         </div>
         <!-- User and Notifications -->
         <div class="flex items-center space-x-4">
           <i class="fa-solid fa-location-dot"></i>
           @if (!location) {
-            <span>Brasov, Romania</span>
+          <span>Brasov, Romania</span>
           } @else {
-            <span>{{ location!.city }}, {{ location!.country }}</span>
+          <span>{{ location!.city }}, {{ location!.country }}</span>
           }
 
           <!-- Notification Button -->
           <div class="ml-4 flex items-center md:ml-6 relative">
             <button type="button" (click)="toggleNotificationCard()"
-              class="rounded-full notification-btn p-1 d-flex justify-center align-items-center">
+              class="rounded-full notification-btn p-1 flex justify-center items-center">
               <span class="relative inline-block">
                 <!-- Notification Badge as a dot -->
                 @if (isNewNotifications) {
-                  <span class="absolute top-0 right-0 block h-2 w-2 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-red-600"></span>
+                <span
+                  class="absolute top-0 right-0 block h-2 w-2 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-red-600"></span>
                 }
                 <i class="fa-solid fa-bell"></i>
               </span>
             </button>
+
+            <!-- Notification Card -->
+            @if (isNotificationCardOpened) {
+            <div class="absolute top-10 right-0 mt-2 w-80 bg-white shadow-lg rounded-lg z-20">
+              <app-notification-card (isClosed)="checkNotificationOpeningStatus($event)">
+              </app-notification-card>
+            </div>
+            }
           </div>
+
 
           <!-- User Profile Dropdown -->
           <div class="relative ml-3">
             <div>
-              <button type="button"
-                class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm "
+              <button type="button" class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm "
                 id="user-menu-button" aria-expanded="false" aria-haspopup="true" (click)="toggleDropdown()">
                 <span class="sr-only">Open user menu</span>
-                <img class="h-8 w-8 rounded-full" src="https://randomuser.me/api/portraits/men/32.jpg" alt="User Avatar">
+                <img class="h-8 w-8 rounded-full" src="https://randomuser.me/api/portraits/men/32.jpg"
+                  alt="User Avatar">
               </button>
             </div>
 
             <!-- Dropdown menu, show/hide based on menu state -->
             @if (showDropdownUser) {
-              <div
-                class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-                <a (click)="openUserProfile()" class="block my-2 mx-4 text-sm text-gray-700 link-navigation no-underline cursor-pointer hover:bg-gray-100"
-                  role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
-                <a routerLink="/settings" class="block my-2 mx-4 text-sm text-gray-700 link-navigation no-underline cursor-pointer hover:bg-gray-100" role="menuitem"
-                  tabindex="-1" id="user-menu-item-1" (click)="closeDropDownUser()">Settings</a>
-                <a (click)="logOut()" class="block my-2 mx-4 text-sm text-gray-700 link-navigation no-underline cursor-pointer hover:bg-gray-100" role="menuitem"
-                  tabindex="-1" id="user-menu-item-2" (click)="closeDropDownUser()">Sign out</a>
-              </div>
+            <div
+              class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+              role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+              <a (click)="openUserProfile()"
+                class="block my-2 mx-4 text-sm text-gray-700 link-navigation no-underline cursor-pointer hover:bg-gray-100"
+                role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
+              <a routerLink="/settings"
+                class="block my-2 mx-4 text-sm text-gray-700 link-navigation no-underline cursor-pointer hover:bg-gray-100"
+                role="menuitem" tabindex="-1" id="user-menu-item-1" (click)="closeDropDownUser()">Settings</a>
+              <a (click)="logOut()"
+                class="block my-2 mx-4 text-sm text-gray-700 link-navigation no-underline cursor-pointer hover:bg-gray-100"
+                role="menuitem" tabindex="-1" id="user-menu-item-2" (click)="closeDropDownUser()">Sign out</a>
+            </div>
             }
           </div>
         </div>
@@ -73,50 +87,57 @@
     </div>
   </header>
 
+
   <div class="flex flex-1 overflow-hidden">
-    <!-- Sidebar -->
-    <aside [class.hidden]="!sidebarOpen" class="w-64 bg-gray-100 lg:block lg:flex-shrink-0">
-      <div class="h-full flex flex-col justify-between py-4">
-        <!-- Navigation Links -->
-        <nav class="space-y-1">
-          <a routerLink="/" routerLinkActive="active" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200 no-underline cursor-pointer">
-            <i class="fa-solid fa-house mr-3"></i>
-            Feed
-          </a>
-          <a routerLink="/" routerLinkActive="active" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200 no-underline cursor-pointer">
-            <i class="fa-solid fa-calendar mr-4"></i>
-            Event (coming soon)
-          </a>
-          <a routerLink="/" routerLinkActive="active" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200 no-underline cursor-pointer">
-            <i class="fa-solid fa-image mr-3"></i>
-            Photos (coming soon)
-          </a>
-        </nav>
+    <div class="max-w-7xl mx-auto px-0 sm:px-6 lg:px-8 flex w-full">
+      <!-- Sidebar -->
+      <aside [class.hidden]="!sidebarOpen" class="w-64 side-nav lg:block lg:flex-shrink-0">
+        <div class="h-full flex flex-col justify-between py-4">
+          <!-- Navigation Links -->
+          <nav class="space-y-1">
+            <a routerLink="/" routerLinkActive="active"
+              class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200 no-underline cursor-pointer">
+              <i class="fa-solid fa-house mr-3"></i>
+              Feed
+            </a>
+            <a routerLink="/" routerLinkActive="active"
+              class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200 no-underline cursor-pointer">
+              <i class="fa-solid fa-calendar mr-4"></i>
+              Event (coming soon)
+            </a>
+            <a routerLink="/" routerLinkActive="active"
+              class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200 no-underline cursor-pointer">
+              <i class="fa-solid fa-image mr-3"></i>
+              Photos (coming soon)
+            </a>
+          </nav>
 
-        <!-- Settings and Copyright -->
-        <div class="space-y-4">
-          <div class="w-100 d-flex justify-center">
-            <mat-divider></mat-divider>
-          </div>
-          <a routerLink="/" routerLinkActive="active" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200 no-underline cursor-pointer">
-            <i class="fa-solid fa-gear mr-3"></i>
-            Settings
-          </a>
-          <div class="text-center text-gray-500 text-sm mt-5">
-            &copy; 2024 Asu Software. <br/>All rights reserved.
+          <!-- Settings and Copyright -->
+          <div class="space-y-4">
+            <div class="w-100 d-flex justify-center">
+              <mat-divider></mat-divider>
+            </div>
+            <a routerLink="/" routerLinkActive="active"
+              class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200 no-underline cursor-pointer">
+              <i class="fa-solid fa-gear mr-3"></i>
+              Settings
+            </a>
+            <div class="text-center text-gray-500 text-sm mt-5">
+              &copy; 2024 Asu Software. <br />All rights reserved.
+            </div>
           </div>
         </div>
-      </div>
-    </aside>
+      </aside>
 
-    <!-- Main content -->
-    <main class="flex-1 p-6 bg-white">
-      <div class="space-y-6">
-        <!-- Replace this section with your content -->
-        <div class="bg-gray-100 p-4 rounded-lg shadow">
-          <router-outlet></router-outlet>
+      <!-- Main content -->
+      <main class="flex-1 p-6 main-content">
+        <div class="space-y-6">
+          <!-- Replace this section with your content -->
+          <div class="p-4">
+            <router-outlet></router-outlet>
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </div>
   </div>
 </div>
