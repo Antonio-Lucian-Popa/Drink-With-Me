@@ -6,4 +6,8 @@ export const routes: Routes = [
     path: 'feed',
     loadChildren: () => import('./shared/components/feed/feed.module').then(m => m.FeedModule)
   },
+  {
+    path: 'settings',
+    loadChildren: () => import('./features/components/settings/settings.module').then(m => m.SettingsModule)
+  },
 ];
