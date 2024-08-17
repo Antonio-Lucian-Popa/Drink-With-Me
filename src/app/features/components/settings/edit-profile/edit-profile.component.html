@@ -1,0 +1,54 @@
+<div class="isolate bg-white pt-5 px-6 py-24 sm:py-32 lg:px-8">
+  <div class="mx-auto max-w-2xl text-center">
+    <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Edit Profile</h2>
+    <p class="mt-2 text-lg leading-8 text-gray-600">Update your profile information below.</p>
+  </div>
+  <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="mx-auto mt-16 max-w-xl sm:mt-20">
+    <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+      <!-- Profile Image -->
+      <div class="sm:col-span-2">
+        <label for="profile-image" class="block text-sm font-semibold leading-6 text-gray-900">Profile Image</label>
+        <div class="mt-2.5 flex justify-center items-center">
+          <div class="relative">
+            <input type="file" formControlName="profileImage" id="profile-image" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" (change)="onFileChange($event)">
+            <img [src]="profileImagePreview" alt="Profile Image" class="w-32 h-32 object-cover rounded-full cursor-pointer border-2 border-gray-300">
+          </div>
+        </div>
+      </div>
+      <!-- First Name -->
+      <div>
+        <label for="first-name" class="block text-sm font-semibold leading-6 text-gray-900">First name</label>
+        <div class="mt-2.5">
+          <input type="text" formControlName="firstName" id="first-name" autocomplete="given-name" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+          <div *ngIf="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched" class="text-red-600 text-sm">First name is required</div>
+        </div>
+      </div>
+      <!-- Last Name -->
+      <div>
+        <label for="last-name" class="block text-sm font-semibold leading-6 text-gray-900">Last name</label>
+        <div class="mt-2.5">
+          <input type="text" formControlName="lastName" id="last-name" autocomplete="family-name" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+          <div *ngIf="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched" class="text-red-600 text-sm">Last name is required</div>
+        </div>
+      </div>
+      <!-- Occupation -->
+      <div>
+        <label for="occupation" class="block text-sm font-semibold leading-6 text-gray-900">Occupation</label>
+        <div class="mt-2.5">
+          <input type="text" formControlName="occupation" id="occupation" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+        </div>
+      </div>
+      <!-- Birthday -->
+      <div>
+        <label for="birthday" class="block text-sm font-semibold leading-6 text-gray-900">Birthday</label>
+        <div class="mt-2.5">
+          <input type="date" formControlName="birthday" id="birthday" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+          <div *ngIf="profileForm.get('birthday')?.hasError('underage') && profileForm.get('birthday')?.touched" class="text-red-600 text-sm">You must be at least 18 years old</div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-10">
+      <button type="submit" [disabled]="profileForm.invalid" class="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save Changes</button>
+    </div>
+  </form>
+</div>

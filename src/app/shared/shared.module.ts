@@ -12,13 +12,15 @@ import { TimeAgoPipe } from "./pipe/time-ago.pipe";
 import { NotificationCardComponent } from './components/notification-card/notification-card.component';
 import { CreatePostDialogComponent } from './components/post-create-input/create-post-dialog/create-post-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { EditProfileComponent } from '../features/components/settings/edit-profile/edit-profile.component';
 
 const NB_COMPONENTS: any[] = [
   PostCreateInputComponent,
   PostComponent,
   PostListComponent,
   NotificationCardComponent,
-  CreatePostDialogComponent
+  CreatePostDialogComponent,
+  EditProfileComponent
 ];
 
 const NB_MODULES: any[] = [
