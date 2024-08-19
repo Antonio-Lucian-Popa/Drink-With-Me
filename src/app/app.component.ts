@@ -6,6 +6,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, filter, of, switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { UserService } from './shared/services/user.service';
+import { WebSocketService } from './shared/components/notification-card/services/web-socket.service';
 
 @Component({
   selector: 'app-root',
@@ -38,7 +39,13 @@ export class AppComponent implements OnInit{
 
   showSidebarAndNavbar: boolean = true;
 
-  constructor(private geolocationService: GeolocationService, private elementRef: ElementRef, private router: Router, private userService: UserService) {}
+  constructor(
+    private geolocationService: GeolocationService,
+    private elementRef: ElementRef,
+    private router: Router,
+    private userService: UserService,
+    private webSocketService: WebSocketService
+  ) {}
 
   ngOnInit(): void {
     this.geolocationService.getCityAndCountry().then(
@@ -81,6 +88,10 @@ export class AppComponent implements OnInit{
         this.showDropdown = false;
         this.searchResults = [];
       }
+    });
+
+    this.webSocketService.newNotifications.subscribe((notification: any) => {
+      this.isNewNotifications = true;
     });
   }
 
