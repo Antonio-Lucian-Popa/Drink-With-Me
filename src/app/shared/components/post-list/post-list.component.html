@@ -1,3 +1,5 @@
 <div class="w-100 d-flex flex-column mt-5">
-  <app-post *ngFor="let post of postList" [post]="post"></app-post>
+ @if(posts && posts.length > 0 && userId) {
+  <app-post *ngFor="let post of postList" [post]="post" [userId]="userId"></app-post>
+ }
 </div>

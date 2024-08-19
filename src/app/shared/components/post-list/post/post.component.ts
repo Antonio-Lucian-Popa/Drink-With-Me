@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, input, Input, OnInit } from '@angular/core';
 import { Post } from '../../../interfaces/post';
 
 @Component({
@@ -10,15 +10,17 @@ import { Post } from '../../../interfaces/post';
 export class PostComponent implements OnInit {
 
 
-  @Input() post!: Post;
+  @Input() post: Post | null = null;
 
-  userId: string = '1';
+  @Input() userId: string | null = null;
 
   isPostOwner: boolean = true;
 
   ngOnInit(): void {
     // check if the user is the owner of the post
-    this.isPostOwner = this.post.user.id === this.userId;
+    if(this.post && this.userId) {
+      this.isPostOwner = this.post.user.id === this.userId;
+    }
     // if the user is the owner of the post, show edit and delete buttons
     // otherwise, hide the buttons
   }

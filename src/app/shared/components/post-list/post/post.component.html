@@ -1,45 +1,47 @@
-<div class="bg-white p-4 rounded-lg shadow-lg max-w-sm mx-auto mb-4">
-  <!-- User Info -->
-  <div class="flex items-center justify-between mb-3">
-    <div class="flex items-center">
-      <img [src]="post.user.profileImageUrl" [alt]="post.user.firstName" class="h-10 w-10 rounded-full mr-3">
-      <div>
-        <p class="text-gray-900 font-semibold mb-0">{{post.user.firstName}} {{post.user.lastName}}</p>
-        <p class="text-gray-500 text-sm mb-0">{{post.createdAt| timeAgo}}</p>
+@if(post) {
+  <div class="bg-white p-4 rounded-lg shadow-lg max-w-sm mx-auto mb-4">
+    <!-- User Info -->
+    <div class="flex items-center justify-between mb-3">
+      <div class="flex items-center">
+        <img [src]="post.user.profileImageUrl" [alt]="post.user.firstName" class="h-10 w-10 rounded-full mr-3">
+        <div>
+          <p class="text-gray-900 font-semibold mb-0">{{post.user.firstName}} {{post.user.lastName}}</p>
+          <p class="text-gray-500 text-sm mb-0">{{post.createdAt| timeAgo}}</p>
+        </div>
+      </div>
+
+      <!-- Ellipsis Menu for Post Owner -->
+      <div *ngIf="isPostOwner" class="text-gray-500">
+
+          <i mat-icon-button [matMenuTriggerFor]="postMenu" class="fa-solid fa-ellipsis-vertical cursor-pointer"></i>
+
+        <mat-menu #postMenu="matMenu">
+          <button mat-menu-item (click)="editPost()">
+            <i class="fa-solid fa-edit mr-2"></i> Edit
+          </button>
+          <button mat-menu-item (click)="deletePost()">
+            <i class="fa-solid fa-trash-alt mr-2"></i> Delete
+          </button>
+        </mat-menu>
       </div>
     </div>
 
-    <!-- Ellipsis Menu for Post Owner -->
-    <div *ngIf="isPostOwner" class="text-gray-500">
+    <!-- Post Content -->
+    <p class="text-gray-800 mb-4">{{post.description}}</p>
 
-        <i mat-icon-button [matMenuTriggerFor]="postMenu" class="fa-solid fa-ellipsis-vertical cursor-pointer"></i>
+    <!-- Interaction Icons -->
+    <div class="flex items-center justify-between text-gray-500">
+      <div class="flex items-center">
+        <button (click)="participate()" class="text-green-500 mr-2">
+          <i class="fa-solid fa-check"></i>
+        </button>
+        <span class="mr-4">{{post.participationCount}}</span>
 
-      <mat-menu #postMenu="matMenu">
-        <button mat-menu-item (click)="editPost()">
-          <i class="fa-solid fa-edit mr-2"></i> Edit
+        <button class="text-gray-500 mr-2">
+          <i class="fa-solid fa-comment"></i>
         </button>
-        <button mat-menu-item (click)="deletePost()">
-          <i class="fa-solid fa-trash-alt mr-2"></i> Delete
-        </button>
-      </mat-menu>
+        <span>{{post.commentsCount}}</span>
+      </div>
     </div>
   </div>
-
-  <!-- Post Content -->
-  <p class="text-gray-800 mb-4">{{post.description}}</p>
-
-  <!-- Interaction Icons -->
-  <div class="flex items-center justify-between text-gray-500">
-    <div class="flex items-center">
-      <button (click)="participate()" class="text-green-500 mr-2">
-        <i class="fa-solid fa-check"></i>
-      </button>
-      <span class="mr-4">{{post.participationCount}}</span>
-
-      <button class="text-gray-500 mr-2">
-        <i class="fa-solid fa-comment"></i>
-      </button>
-      <span>{{post.commentsCount}}</span>
-    </div>
-  </div>
-</div>
+}

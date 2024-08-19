@@ -3,8 +3,9 @@ import { NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/rout
 import { SharedModule } from './shared/shared.module';
 import { GeolocationService } from './shared/services/geolocation.service';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { filter } from 'rxjs';
+import { debounceTime, filter, of, switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { UserService } from './shared/services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -37,7 +38,7 @@ export class AppComponent implements OnInit{
 
   showSidebarAndNavbar: boolean = true;
 
-  constructor(private geolocationService: GeolocationService, private elementRef: ElementRef, private router: Router) {}
+  constructor(private geolocationService: GeolocationService, private elementRef: ElementRef, private router: Router, private userService: UserService) {}
 
   ngOnInit(): void {
     this.geolocationService.getCityAndCountry().then(
@@ -58,6 +59,29 @@ export class AppComponent implements OnInit{
 
     // Initial check in case the app starts on a sign-up/sign-in route
     this.updateLayout();
+
+    this.searchControl.valueChanges
+    .pipe(
+      debounceTime(300), // Wait for 300ms pause in events
+      filter(term => term === '' || (term && term.length > 0 )), // Ensure non-empty or reset
+      switchMap(term => {
+        if (term) {
+          return this.userService.searchUsers(term);
+        } else {
+          // Immediately return an empty array when the term is empty
+          return of([]);
+        }
+      })
+    )
+    .subscribe((results: any[]) => {
+      if (results.length > 0) {
+        this.searchResults = results;
+        this.showDropdown = true;
+      } else {
+        this.showDropdown = false;
+        this.searchResults = [];
+      }
+    });
   }
 
   toggleSidebar() {
