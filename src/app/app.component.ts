@@ -1,13 +1,15 @@
 import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { SharedModule } from './shared/shared.module';
 import { GeolocationService } from './shared/services/geolocation.service';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { filter } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SharedModule, RouterModule],
+  imports: [RouterOutlet, SharedModule, RouterModule, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -33,7 +35,9 @@ export class AppComponent implements OnInit{
   showDropdown: boolean = false;
   searchResults: any[] = [];
 
-  constructor(private geolocationService: GeolocationService, private elementRef: ElementRef) {}
+  showSidebarAndNavbar: boolean = true;
+
+  constructor(private geolocationService: GeolocationService, private elementRef: ElementRef, private router: Router) {}
 
   ngOnInit(): void {
     this.geolocationService.getCityAndCountry().then(
@@ -45,6 +49,15 @@ export class AppComponent implements OnInit{
         this.error = error;
       }
     );
+
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.updateLayout();
+    });
+
+    // Initial check in case the app starts on a sign-up/sign-in route
+    this.updateLayout();
   }
 
   toggleSidebar() {
@@ -80,6 +93,15 @@ export class AppComponent implements OnInit{
   checkNotificationOpeningStatus(event: any): void {
     if (this.isNotificationCardOpened) {
       this.isNotificationCardOpened = false;
+    }
+  }
+
+  private updateLayout(): void {
+    const currentRoute = this.router.url;
+    if (currentRoute.startsWith('/sign-in') || currentRoute.startsWith('/sign-up')) {
+      this.showSidebarAndNavbar = false;
+    } else {
+      this.showSidebarAndNavbar = true;
     }
   }
 }

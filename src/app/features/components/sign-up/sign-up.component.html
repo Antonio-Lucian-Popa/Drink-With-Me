@@ -1,0 +1,107 @@
+<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+  <div class="flex flex-col items-center sm:mx-auto sm:w-full sm:max-w-sm">
+    <img class="h-20 w-auto" src="/logo.PNG" alt="logo">
+    <h2 class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Register to Drink with me</h2>
+  </div>
+
+  <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="space-y-6">
+
+      <div>
+        <label for="firstName" class="block text-sm font-medium leading-6 text-gray-900">First name</label>
+        <div class="mt-2">
+          <input id="firstName" formControlName="firstName" type="text"
+                 [ngClass]="{'border-red-600 ring-red-600': isInvalid('firstName')}"
+                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6">
+          <div *ngIf="isInvalid('firstName')" class="text-red-600 mt-2 text-sm">
+            First name is required.
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label for="lastName" class="block text-sm font-medium leading-6 text-gray-900">Last name</label>
+        <div class="mt-2">
+          <input id="lastName" formControlName="lastName" type="text"
+                 [ngClass]="{'border-red-600 ring-red-600': isInvalid('lastName')}"
+                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6">
+          <div *ngIf="isInvalid('lastName')" class="text-red-600 mt-2 text-sm">
+            Last name is required.
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
+        <div class="mt-2">
+          <input id="email" formControlName="email" type="email"
+                 [ngClass]="{'border-red-600 ring-red-600': isInvalid('email')}"
+                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6">
+          <div *ngIf="isInvalid('email')" class="text-red-600 mt-2 text-sm">
+            <ng-container *ngIf="registrationForm.get('email')?.errors?.['required']">
+              Email is required.
+            </ng-container>
+            <ng-container *ngIf="registrationForm.get('email')?.errors?.['email']">
+              Please enter a valid email address.
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label for="birthday" class="block text-sm font-medium leading-6 text-gray-900">Birthday</label>
+        <div class="mt-2">
+          <input id="birthday" formControlName="birthday" type="date"
+                 [ngClass]="{'border-red-600 ring-red-600': birthdayInvalid || isInvalid('birthday')}"
+                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6">
+          <div *ngIf="isInvalid('birthday') || birthdayInvalid" class="text-red-600 mt-2 text-sm">
+            <ng-container *ngIf="birthdayInvalid">
+              You must be at least 18 years old.
+            </ng-container>
+            <ng-container *ngIf="!birthdayInvalid && registrationForm.get('birthday')?.errors?.['required']">
+              Birthday is required.
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label for="occupation" class="block text-sm font-medium leading-6 text-gray-900">Occupation</label>
+        <div class="mt-2">
+          <input id="occupation" formControlName="occupation" type="text"
+                 [ngClass]="{'border-red-600 ring-red-600': isInvalid('occupation')}"
+                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6">
+          <div *ngIf="isInvalid('occupation')" class="text-red-600 mt-2 text-sm">
+            Occupation is required.
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
+        <div class="mt-2">
+          <input id="password" formControlName="password" type="password"
+                 [ngClass]="{'border-red-600 ring-red-600': isInvalid('password')}"
+                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6">
+          <div *ngIf="isInvalid('password')" class="text-red-600 mt-2 text-sm">
+            <ng-container *ngIf="registrationForm.get('password')?.errors?.['required']">
+              Password is required.
+            </ng-container>
+            <ng-container *ngIf="registrationForm.get('password')?.errors?.['minlength']">
+              Password must be at least 6 characters long.
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Register</button>
+      </div>
+    </form>
+
+    <p class="mt-10 text-center text-sm text-gray-500">
+      Already have an account?
+      <a routerLink="/sign-in" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Sign in</a>
+    </p>
+  </div>
+</div>

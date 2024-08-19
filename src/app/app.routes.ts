@@ -10,4 +10,16 @@ export const routes: Routes = [
     path: 'settings',
     loadChildren: () => import('./features/components/settings/settings.module').then(m => m.SettingsModule)
   },
+  {
+    path: 'sign-up',
+    loadChildren: () => import('./features/components/sign-up/sign-up.module').then(m => m.SignUpModule)
+  },
+  {
+    path: 'sign-in',
+    loadChildren: () => import('./features/components/sign-in/sign-in.module').then(m => m.SignInModule)
+  },
+  {
+    path: 'user-profile/:id',
+    loadChildren: () => import('./features/components/user-profile/user-profile.module').then(m => m.UserProfileModule)
+  }
 ];
