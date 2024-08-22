@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../../auth/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
@@ -12,13 +14,19 @@ export class SignUpComponent {
   registrationForm: FormGroup;
   birthdayInvalid: boolean = false;
 
-  constructor(private fb: FormBuilder) {
+  message = "";
+  errorMessage = "";
+  showConfirmationBanner = false;  // Controls the visibility of the confirmation banner
+  showErrorBanner = false;
+
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.registrationForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       birthday: ['', Validators.required],
       occupation: ['', Validators.required],
+      gender: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
@@ -37,9 +45,23 @@ export class SignUpComponent {
       this.registrationForm.markAllAsTouched();
       return;
     } else {
-      const { firstName, lastName, email, birthday, occupation, password } = this.registrationForm.value;
-      const payload = { firstName, lastName, email, birthday, occupation, password };
-      // TODO: call the API to register the user
+      const { firstName, lastName, email, birthday, occupation, password, gender } = this.registrationForm.value;
+      const payload = { firstName, lastName, email, birthday, occupation, password, gender };
+      this.authService.register(payload).subscribe({
+        next: (res) => {
+          this.showErrorBanner = false;
+          //this.router.navigate(['/sign-in']);
+          this.message = res;
+          this.showConfirmationBanner = true;
+          // Scroll to the top of the page
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
+        error: (error) => {
+          this.showConfirmationBanner = false;
+          this.errorMessage = error.message;
+          this.showErrorBanner = true;
+        }
+      })
     }
   }
 
@@ -68,9 +90,6 @@ export class SignUpComponent {
   isInvalid(controlName: string): boolean {
     const control = this.registrationForm.get(controlName);
     const isInvalid = control ? control.invalid && (control.touched || control.dirty) : false;
-    if (controlName === 'lastName') {
-      console.log('Control:', isInvalid);
-    }
     return isInvalid;
   }
 }

@@ -1,7 +1,25 @@
 <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+
+  @if(showConfirmationBanner) {
+  <!-- Confirmation Banner -->
+  <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-3 mb-4" role="alert">
+    <p class="font-bold">Registration Successful!</p>
+    <p>{{message}}</p>
+  </div>
+  }
+
+  @if(showErrorBanner) {
+    <!-- Error Banner -->
+    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 mb-4" role="alert">
+      <p class="font-bold">Registration Failed!</p>
+      <p>{{errorMessage}}</p>
+    </div>
+    }
+
   <div class="flex flex-col items-center sm:mx-auto sm:w-full sm:max-w-sm">
     <img class="h-20 w-auto" src="/logo.PNG" alt="logo">
-    <h2 class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Register to Drink with me</h2>
+    <h2 class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Register to Drink with me
+    </h2>
   </div>
 
   <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -11,8 +29,8 @@
         <label for="firstName" class="block text-sm font-medium leading-6 text-gray-900">First name</label>
         <div class="mt-2">
           <input id="firstName" formControlName="firstName" type="text"
-                 [ngClass]="{'border-red-600 ring-red-600': isInvalid('firstName')}"
-                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6">
+            [ngClass]="{'border-red-600 ring-red-600': isInvalid('firstName')}"
+            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6">
           <div *ngIf="isInvalid('firstName')" class="text-red-600 mt-2 text-sm">
             First name is required.
           </div>
@@ -23,8 +41,8 @@
         <label for="lastName" class="block text-sm font-medium leading-6 text-gray-900">Last name</label>
         <div class="mt-2">
           <input id="lastName" formControlName="lastName" type="text"
-                 [ngClass]="{'border-red-600 ring-red-600': isInvalid('lastName')}"
-                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6">
+            [ngClass]="{'border-red-600 ring-red-600': isInvalid('lastName')}"
+            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6">
           <div *ngIf="isInvalid('lastName')" class="text-red-600 mt-2 text-sm">
             Last name is required.
           </div>
@@ -35,8 +53,8 @@
         <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
         <div class="mt-2">
           <input id="email" formControlName="email" type="email"
-                 [ngClass]="{'border-red-600 ring-red-600': isInvalid('email')}"
-                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6">
+            [ngClass]="{'border-red-600 ring-red-600': isInvalid('email')}"
+            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6">
           <div *ngIf="isInvalid('email')" class="text-red-600 mt-2 text-sm">
             <ng-container *ngIf="registrationForm.get('email')?.errors?.['required']">
               Email is required.
@@ -52,8 +70,8 @@
         <label for="birthday" class="block text-sm font-medium leading-6 text-gray-900">Birthday</label>
         <div class="mt-2">
           <input id="birthday" formControlName="birthday" type="date"
-                 [ngClass]="{'border-red-600 ring-red-600': birthdayInvalid || isInvalid('birthday')}"
-                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6">
+            [ngClass]="{'border-red-600 ring-red-600': birthdayInvalid || isInvalid('birthday')}"
+            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6">
           <div *ngIf="isInvalid('birthday') || birthdayInvalid" class="text-red-600 mt-2 text-sm">
             <ng-container *ngIf="birthdayInvalid">
               You must be at least 18 years old.
@@ -69,8 +87,8 @@
         <label for="occupation" class="block text-sm font-medium leading-6 text-gray-900">Occupation</label>
         <div class="mt-2">
           <input id="occupation" formControlName="occupation" type="text"
-                 [ngClass]="{'border-red-600 ring-red-600': isInvalid('occupation')}"
-                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6">
+            [ngClass]="{'border-red-600 ring-red-600': isInvalid('occupation')}"
+            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6">
           <div *ngIf="isInvalid('occupation')" class="text-red-600 mt-2 text-sm">
             Occupation is required.
           </div>
@@ -78,11 +96,28 @@
       </div>
 
       <div>
+        <label for="gender" class="block text-sm font-medium leading-6 text-gray-900">Gender</label>
+        <div class="mt-2">
+          <select id="gender" formControlName="gender" [ngClass]="{'border-red-600 ring-red-600': isInvalid('gender')}"
+            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6">
+            <option value="" disabled>Select your gender</option>
+            <option value="MALE">Male</option>
+            <option value="FEMALE">Female</option>
+            <option value="OTHER">Other</option>
+          </select>
+          <div *ngIf="isInvalid('gender')" class="text-red-600 mt-2 text-sm">
+            Gender is required.
+          </div>
+        </div>
+      </div>
+
+
+      <div>
         <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
         <div class="mt-2">
           <input id="password" formControlName="password" type="password"
-                 [ngClass]="{'border-red-600 ring-red-600': isInvalid('password')}"
-                 class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6">
+            [ngClass]="{'border-red-600 ring-red-600': isInvalid('password')}"
+            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6">
           <div *ngIf="isInvalid('password')" class="text-red-600 mt-2 text-sm">
             <ng-container *ngIf="registrationForm.get('password')?.errors?.['required']">
               Password is required.
@@ -95,7 +130,8 @@
       </div>
 
       <div class="mt-5">
-        <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Register</button>
+        <button type="submit"
+          class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Register</button>
       </div>
     </form>
 

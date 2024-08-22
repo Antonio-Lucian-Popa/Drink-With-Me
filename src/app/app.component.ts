@@ -7,6 +7,8 @@ import { debounceTime, filter, of, switchMap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { UserService } from './shared/services/user.service';
 import { WebSocketService } from './shared/components/notification-card/services/web-socket.service';
+import { AuthService } from './auth/services/auth.service';
+import { User } from './shared/interfaces/user';
 
 @Component({
   selector: 'app-root',
@@ -39,15 +41,36 @@ export class AppComponent implements OnInit{
 
   showSidebarAndNavbar: boolean = true;
 
+  user: User | null = null;
+
   constructor(
     private geolocationService: GeolocationService,
     private elementRef: ElementRef,
     private router: Router,
     private userService: UserService,
-    private webSocketService: WebSocketService
+    private webSocketService: WebSocketService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+     // Get user ID from JWT
+  this.authService.getUserId().then(userId => {
+    if (userId) {
+      // Fetch user profile info using the user ID
+      this.userService.getUserProfileInfo(userId).subscribe(
+        userInfo => {
+          console.log('User Info:', userInfo);
+          this.user = userInfo; // Store the user info in a component variable
+        },
+        error => {
+          console.error('Failed to fetch user info:', error);
+        }
+      );
+    } else {
+      console.log('No user ID found. User might not be logged in.');
+    }
+  });
+
     this.geolocationService.getCityAndCountry().then(
       location => {
         this.location = location;

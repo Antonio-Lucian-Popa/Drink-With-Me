@@ -8,7 +8,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { CreateUser } from '../../shared/interfaces/create-user';
 
 export interface Token {
-  access_token: string;
+  token: string;
   refresh_token?: string;
 }
 
@@ -24,9 +24,9 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   login(payload: any): Observable<Token | null> {
-    return this.http.post<Token>(`${this.URL_LINK}/auth/authenticate`, payload).pipe(
+    return this.http.post<Token>(`${this.URL_LINK}/auth/login`, payload).pipe(
       tap(response => {
-        localStorage.setItem('jwt', response.access_token); // Store JWT token
+        localStorage.setItem('jwt', response.token); // Store JWT token
       }),
       catchError(error => {
         console.error('Login failed:', error);
@@ -40,7 +40,7 @@ export class AuthService {
 
     // Append user data with explicit Content-Type for the JSON part
     const userBlob = new Blob([JSON.stringify(userData)], { type: 'application/json' });
-    formData.append('request', userBlob);
+    formData.append('userDto', userBlob);
 
     // Append file if present
     if (file) {
@@ -49,7 +49,7 @@ export class AuthService {
       formData.append('file', new Blob([]), 'empty');
     }
 
-    return this.http.post(`${this.URL_LINK}/auth/register`, formData).pipe(
+    return this.http.post(`${this.URL_LINK}/auth/register`, formData, { responseType: 'text' as 'json' }).pipe(
       catchError(this.handleError)
     );
   }

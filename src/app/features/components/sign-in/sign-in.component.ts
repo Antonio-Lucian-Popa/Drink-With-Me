@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../../../auth/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-in',
@@ -11,7 +13,7 @@ export class SignInComponent {
 
   loginForm: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
@@ -26,7 +28,12 @@ export class SignInComponent {
     } else {
       const { email, password } = this.loginForm.value;
       const payload = { email, password };
-      // TODO: call the API to login the user
+      this.authService.login(payload).subscribe({
+        next: (res) => {
+          this.router.navigate(['/']);
+        },
+        error: (error) => {}
+      })
     }
   }
 
