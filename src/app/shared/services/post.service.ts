@@ -143,6 +143,10 @@ export class PostService {
     return this.http.get<Page<Post>>(`${this.URL_LINK}/posts/findAllPosts/${userId}`, { params });
   }
 
+  findAllPosts(userId: string, page: number, size: number): Observable<Page<Post>> {
+    return this.http.get<Page<Post>>(`${this.URL_LINK}/posts/findAllPosts/${userId}?page=${page}&size=${size}`);
+  }
+
   getPopularImages(page: number, size: number): Observable<PaginatedPostImages> {
     let params = new HttpParams();
     params = params.append('page', page.toString());
@@ -155,13 +159,13 @@ export class PostService {
     return this.http.get<any>(`${this.URL_LINK}/posts/find-post/${id}`);
   }
 
-  likePost(postId: string, userId: string): Observable<PostDto> {
-    const url = `${this.URL_LINK}/posts/like/${postId}/${userId}`;
+  participPost(postId: string, userId: string): Observable<PostDto> {
+    const url = `${this.URL_LINK}/posts/participant/${postId}/${userId}`;
     return this.http.put<PostDto>(url, {}); // Sending an empty object as the body, as the endpoint might not require it
   }
 
-  unlikePost(postId: string, userId: string): Observable<PostDto> {
-    const url = `${this.URL_LINK}/posts/unlike/${postId}/${userId}`;
+  removeParticipPost(postId: string, userId: string): Observable<PostDto> {
+    const url = `${this.URL_LINK}/posts/remove-participant/${postId}/${userId}`;
     return this.http.put<PostDto>(url, {}); // Sending an empty object as the body, as the endpoint might not require it
   }
 

@@ -7,35 +7,59 @@
     </button>
   </div>
 
-  <div class="post-header flex items-center mb-4">
-    <!-- User Avatar (hidden on mobile) -->
-    <img [src]="userProfileImage" alt="{{ user.firstName }}'s avatar" class="user-avatar w-12 h-12 rounded-full object-cover mr-3 hidden sm:block">
+  <!-- Post Form -->
+  <form [formGroup]="postForm" class="space-y-4">
+    <div class="flex items-center">
+      <!-- User Avatar (hidden on mobile) -->
+      <img [src]="userProfileImage" alt="{{ user.firstName }}'s avatar" class="user-avatar w-10 h-10 rounded-full object-cover mr-3 hidden sm:block">
 
-    <!-- Post Form -->
-    <form [formGroup]="postForm" class="flex-grow">
+      <!-- Post Textarea -->
       <textarea formControlName="description"
                 placeholder="What's on your mind, {{ user.firstName }}?"
-                class="post-textarea w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none min-h-[50px]"></textarea>
-    </form>
+                class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none min-h-[50px]"></textarea>
+    </div>
 
-    <button (click)="createPost()" class="submit-post-btn ml-4 bg-blue-600 text-white rounded-lg p-2 hover:bg-blue-700">
-      <i class="fa-solid fa-paper-plane"></i>
-    </button>
-  </div>
+    <!-- County and City Select -->
+    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+      <div class="flex-1">
+        <select formControlName="county"
+                class="w-full p-2.5 text-sm text-gray-500 bg-white border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <option value="" disabled selected>Select a county</option>
+          <option [value]="county.id" *ngFor="let county of counties">{{ county.name }}</option>
+        </select>
+      </div>
+      <div class="flex-1">
+        <select formControlName="city"
+                [disabled]="cities.length === 0"
+                class="w-full p-2.5 text-sm text-gray-500 bg-white border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <option value="" disabled selected>Select a city</option>
+          <option [value]="city.id" *ngFor="let city of cities">{{ city.name }}</option>
+        </select>
+      </div>
+    </div>
 
-  <!-- Image Upload Icon -->
-  <div class="image-upload flex items-center mt-4">
-    <i class="fa fa-image fa-lg text-gray-500 cursor-pointer mr-4" (click)="imageInput.click()"></i>
-    <input type="file" #imageInput (change)="onImageUpload($event)" multiple hidden>
-  </div>
+    <!-- Image Upload and Preview -->
+    <div class="flex items-center mt-4 space-x-4" *ngIf="false">
+      <i class="fa fa-image fa-lg text-gray-500 cursor-pointer" (click)="imageInput.click()"></i>
+      <input type="file" #imageInput (change)="onImageUpload($event)" multiple hidden>
 
-  <!-- Preview of Uploaded Images -->
-  <div class="image-preview mt-4 flex flex-wrap gap-4" *ngIf="images && images.length > 0">
-    <div *ngFor="let image of images; let i = index" class="preview-image relative">
-      <img [src]="image" alt="Image preview" class="rounded-md max-w-xs">
-      <button class="remove-image-btn absolute top-1 right-1 bg-black bg-opacity-60 rounded-full p-1 text-white" (click)="removeImage(i)">
-        <i class="fa fa-times-circle"></i>
+      <div class="flex space-x-4">
+        <div *ngFor="let image of images; let i = index" class="relative">
+          <img [src]="image" alt="Image preview" class="rounded-md w-16 h-16 object-cover">
+          <button class="absolute top-1 right-1 bg-black bg-opacity-60 rounded-full p-1 text-white" (click)="removeImage(i)">
+            <i class="fa fa-times-circle"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expanded Send Button -->
+    <div class="mt-6">
+      <button (click)="createPost()" [disabled]="!postForm.valid"
+              class="w-full bg-blue-600 text-white rounded-lg p-3 hover:bg-blue-700 text-center"
+              [ngClass]="{'opacity-50 cursor-not-allowed': !postForm.valid}">
+        <i class="fa-solid fa-paper-plane mr-2"></i> Send Post
       </button>
     </div>
-  </div>
+  </form>
 </div>

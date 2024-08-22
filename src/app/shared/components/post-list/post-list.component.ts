@@ -61,7 +61,7 @@ export class PostListComponent implements OnInit{
   constructor(private postService: PostService, private userService: UserService) {}
 
   ngOnInit(): void {
-    this.loadPosts();
+   // this.loadPosts();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -81,11 +81,24 @@ export class PostListComponent implements OnInit{
   }
 
   private loadPosts(): void {
-    if (this.userId && this.includeFollowers && !this.county && !this.city) {
-      this.loadPostsByUserId();
+    if (this.userId && !this.county && !this.city) {
+      this.loadAllPosts();
     } else if (this.county && this.city) {
       this.loadPostsByLocation();
     }
+  }
+
+  private loadAllPosts(): void {
+    this.subscription.add(
+      this.postService.findAllPosts(this.userId, this.page, this.size).subscribe({
+        next: (response: Page<Post>) => {
+          this.handlePostResponse(response);
+        },
+        error: (error: any) => {
+          console.error('Error loading all posts:', error);
+        },
+      })
+    );
   }
 
   private loadPostsByUserId(): void {

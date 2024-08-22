@@ -1,128 +1,142 @@
 <div class="min-h-screen flex flex-col">
   <!-- Top bar -->
   @if (showSidebarAndNavbar) {
-    <header class="w-full bg-white lg:static lg:top-0 lg:left-0 fixed top-0 left-0 z-50">
-      <div class="max-w-7xl mx-auto px-0 sm:px-0 lg:px-8">
-        <div class="flex justify-between h-16 items-center mx-3">
-          <div class="flex">
-            <!-- Mobile menu button -->
-            <button (click)="toggleSidebar()" class="lg:hidden text-gray-500 hover:text-gray-700 focus:outline-none mr-3">
-              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
+  <header class="w-full bg-white lg:static lg:top-0 lg:left-0 fixed top-0 left-0 z-50">
+    <div class="max-w-7xl mx-auto px-0 sm:px-0 lg:px-8">
+      <div class="flex justify-between h-16 items-center mx-3">
+        <div class="flex">
+          <!-- Mobile menu button -->
+          <button (click)="toggleSidebar()" class="lg:hidden text-gray-500 hover:text-gray-700 focus:outline-none mr-3">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+
+          <!-- Logo -->
+          <div class="flex-shrink-0 flex items-center">
+            <img class="h-16 w-auto" src="/logo.PNG" alt="logo">
+          </div>
+        </div>
+
+        <!-- search-component.html -->
+        <div class="hidden lg:flex relative mt-2 w-full max-w-xs">
+          <input type="search" placeholder="Search..." [formControl]="searchControl"
+            class="block w-full rounded-md border-gray-300 pl-3 pr-4 py-1.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
+          <div *ngIf="showDropdown && searchResults.length > 0"
+            class="absolute z-10 w-full mt-1 bg-white shadow-lg rounded-md">
+            <ul class="text-sm text-gray-700 pl-2 mb-0">
+              <li *ngFor="let result of searchResults" class="py-2 hover:bg-gray-100 cursor-pointer">
+              <div class="d-flex align-items-center w-100" (click)="openUserProfile(result.id)">
+                <img class="user-avatar" [src]="result.profileImageUrl" [alt]="result.firstName">
+                <div class="ml-2">
+                  <p class="text-gray-900 mb-0 pb-0">{{ result.firstName }} {{ result.lastName }}</p>
+                </div>
+              </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+
+        <!-- User and Notifications -->
+        <div class="flex items-center space-x-4">
+          <i class="fa-solid fa-location-dot"></i>
+          @if (!location) {
+          <span>Brasov, Romania</span>
+          } @else {
+          <span>{{ location!.city }}, {{ location!.country }}</span>
+          }
+
+          <!-- Notification Button -->
+          <div class="ml-4 flex items-center md:ml-6 relative">
+            <button type="button" (click)="toggleNotificationCard()"
+              class="rounded-full notification-btn p-1 flex justify-center items-center">
+              <span class="relative inline-block">
+                <!-- Notification Badge as a dot -->
+                @if (isNewNotifications) {
+                <span
+                  class="absolute top-0 right-0 block h-2 w-2 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-red-600"></span>
+                }
+                <i class="fa-solid fa-bell"></i>
+              </span>
             </button>
 
-            <!-- Logo -->
-            <div class="flex-shrink-0 flex items-center">
-              <img class="h-16 w-auto" src="/logo.PNG" alt="logo">
+            <!-- Notification Card -->
+            @if (isNotificationCardOpened) {
+            <div class="absolute top-10 right-0 mt-2 w-80 bg-white shadow-lg rounded-lg z-20">
+              <app-notification-card (isClosed)="checkNotificationOpeningStatus($event)">
+              </app-notification-card>
             </div>
-          </div>
-
-          <!-- Search bar (hidden on mobile) -->
-          <div class="hidden lg:flex flex-1 items-center justify-center">
-            <input class="w-full max-w-md px-4 py-2 border rounded-lg" type="text" placeholder="Search..." [formControl]="searchControl">
-            <div *ngIf="showDropdown && searchResults.length > 0"
-              class="absolute z-10 w-full mt-1 bg-white shadow-lg rounded-md">
-              <ul class="text-sm text-gray-700 pl-2 mb-0">
-                <li *ngFor="let result of searchResults" class="py-2 hover:bg-gray-100 cursor-pointer">
-                <div class="d-flex align-items-center w-100" (click)="openUserProfile(result.id)">
-                  <img class="user-avatar" [src]="result.profileImageUrl" [alt]="result.firstName">
-                  <div class="ml-2">
-                    <p class="text-gray-900 mb-0 pb-0">{{ result.firstName }} {{ result.lastName }}</p>
-                  </div>
-                </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- User and Notifications -->
-          <div class="flex items-center space-x-4">
-            <i class="fa-solid fa-location-dot"></i>
-            @if (!location) {
-              <span>Brasov, Romania</span>
-            } @else {
-              <span>{{ location!.city }}, {{ location!.country }}</span>
             }
+          </div>
 
-            <!-- Notification Button -->
-            <div class="ml-4 flex items-center md:ml-6 relative">
-              <button type="button" (click)="toggleNotificationCard()" class="rounded-full notification-btn p-1 flex justify-center items-center">
-                <span class="relative inline-block">
-                  <!-- Notification Badge as a dot -->
-                  @if (isNewNotifications) {
-                    <span class="absolute top-0 right-0 block h-2 w-2 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-red-600"></span>
-                  }
-                  <i class="fa-solid fa-bell"></i>
-                </span>
+          <!-- User Profile Dropdown -->
+          <div class="relative ml-3">
+            <div>
+              <button type="button" class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm"
+                id="user-menu-button" aria-expanded="false" aria-haspopup="true" (click)="toggleDropdown()">
+                <span class="sr-only">Open user menu</span>
+                <img class="h-8 w-8 rounded-full" [src]="user?.profileImageUrl" alt="User Avatar">
               </button>
-
-              <!-- Notification Card -->
-              @if (isNotificationCardOpened) {
-                <div class="absolute top-10 right-0 mt-2 w-80 bg-white shadow-lg rounded-lg z-20">
-                  <app-notification-card (isClosed)="checkNotificationOpeningStatus($event)">
-                  </app-notification-card>
-                </div>
-              }
             </div>
 
-            <!-- User Profile Dropdown -->
-            <div class="relative ml-3">
-              <div>
-                <button type="button" class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm" id="user-menu-button" aria-expanded="false" aria-haspopup="true" (click)="toggleDropdown()">
-                  <span class="sr-only">Open user menu</span>
-                  <img class="h-8 w-8 rounded-full" [src]="user?.profileImageUrl" alt="User Avatar">
-                </button>
-              </div>
-
-              <!-- Dropdown menu, show/hide based on menu state -->
-              @if (showDropdownUser) {
-                <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-                  <a (click)="openUserProfile()" class="block my-2 mx-4 text-sm text-gray-700 link-navigation no-underline cursor-pointer hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
-                  <a routerLink="/settings" class="block my-2 mx-4 text-sm text-gray-700 link-navigation no-underline cursor-pointer hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-1" (click)="closeDropDownUser()">Settings</a>
-                  <a (click)="logOut()" class="block my-2 mx-4 text-sm text-gray-700 link-navigation no-underline cursor-pointer hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-2" (click)="closeDropDownUser()">Sign out</a>
-                </div>
-              }
+            <!-- Dropdown menu, show/hide based on menu state -->
+            @if (showDropdownUser) {
+            <div
+              class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+              role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+              <a (click)="openUserProfile()"
+                class="block my-2 mx-4 text-sm text-gray-700 link-navigation no-underline cursor-pointer hover:bg-gray-100"
+                role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
+              <a routerLink="/settings"
+                class="block my-2 mx-4 text-sm text-gray-700 link-navigation no-underline cursor-pointer hover:bg-gray-100"
+                role="menuitem" tabindex="-1" id="user-menu-item-1" (click)="closeDropDownUser()">Settings</a>
+              <a (click)="logOut()"
+                class="block my-2 mx-4 text-sm text-gray-700 link-navigation no-underline cursor-pointer hover:bg-gray-100"
+                role="menuitem" tabindex="-1" id="user-menu-item-2" (click)="closeDropDownUser()">Sign out</a>
             </div>
+            }
           </div>
         </div>
       </div>
-    </header>
+    </div>
+  </header>
   }
 
-  <div class="flex flex-1 overflow-hidden lg:pt-0" [ngClass]="{'pt-16': showSidebarAndNavbar, 'pt-13': !showSidebarAndNavbar}">
+  <div class="flex flex-1 overflow-hidden lg:pt-0"
+    [ngClass]="{'pt-16': showSidebarAndNavbar, 'pt-13': !showSidebarAndNavbar}">
     <div class="max-w-7xl mx-auto px-0 sm:px-6 lg:px-8 flex w-full">
       <!-- Sidebar -->
       @if (showSidebarAndNavbar) {
-        <aside
-          [class.hidden]="!sidebarOpen"
-          class="w-64 side-nav lg:block lg:flex-shrink-0 fixed lg:static top-16 lg:top-0 left-0 lg:left-auto h-full lg:h-screen z-40 transform lg:transform-none transition-transform duration-300 ease-in-out bg-white"
-        >
-          <div class="h-full flex flex-col justify-between py-4">
-            <!-- Navigation Links -->
-            <nav class="space-y-1">
-              <a routerLink="/" routerLinkActive="active" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200 no-underline cursor-pointer">
-                <i class="fa-solid fa-house mr-3"></i>
-                Feed
-              </a>
-              <!-- Additional nav links -->
-            </nav>
+      <aside [class.hidden]="!sidebarOpen"
+        class="w-64 side-nav lg:block lg:flex-shrink-0 fixed lg:static top-16 lg:top-0 left-0 lg:left-auto h-full lg:h-screen z-40 transform lg:transform-none transition-transform duration-300 ease-in-out bg-white">
+        <div class="h-full flex flex-col justify-between py-4">
+          <!-- Navigation Links -->
+          <nav class="space-y-1">
+            <a routerLink="/" routerLinkActive="active"
+              class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200 no-underline cursor-pointer">
+              <i class="fa-solid fa-house mr-3"></i>
+              Feed
+            </a>
+            <!-- Additional nav links -->
+          </nav>
 
-            <!-- Settings and Copyright -->
-            <div class="space-y-4">
-              <div class="w-100 d-flex justify-center">
-                <mat-divider></mat-divider>
-              </div>
-              <a routerLink="/settings" routerLinkActive="active" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200 no-underline cursor-pointer">
-                <i class="fa-solid fa-gear mr-3"></i>
-                Settings
-              </a>
-              <div class="text-center text-gray-500 text-sm mt-5">
-                &copy; 2024 Asu Software. <br />All rights reserved.
-              </div>
+          <!-- Settings and Copyright -->
+          <div class="space-y-4">
+            <div class="w-100 d-flex justify-center">
+              <mat-divider></mat-divider>
+            </div>
+            <a routerLink="/settings" routerLinkActive="active"
+              class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200 no-underline cursor-pointer">
+              <i class="fa-solid fa-gear mr-3"></i>
+              Settings
+            </a>
+            <div class="text-center text-gray-500 text-sm mt-5">
+              &copy; 2024 Asu Software. <br />All rights reserved.
             </div>
           </div>
-        </aside>
+        </div>
+      </aside>
       }
 
       <!-- Main content -->

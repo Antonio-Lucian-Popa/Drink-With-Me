@@ -1,11 +1,13 @@
 export interface Post {
   id: string;
   description: string;
-  imageUrl?: string;
-  participationCount: number;
-  commentsCount: number;
   createdAt: string;
+  location: Location;
   user: UserPost;
+  participantsCount: number;
+  numberOfComments: number;
+  participated: boolean;
+  imageFileNames?: string;
 }
 
 export interface UserPost {
@@ -13,4 +15,9 @@ export interface UserPost {
   firstName: string;
   lastName: string;
   profileImageUrl: string;
+}
+
+export interface Location {
+  id: string;
+  name: string;
 }
