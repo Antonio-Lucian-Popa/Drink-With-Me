@@ -12,13 +12,6 @@ mat-divider {
   background-color: #ffffff;
 }
 
-.relative .absolute.z-10 {
-  width: 100%; /* Ensures the dropdown width matches the input */
-  top: 100%; /* Positions it directly below the input */
-  left: 0; /* Aligns it with the input's left edge */
-  transform: translateY(0); /* Ensure there's no vertical offset */
-  max-width: none; /* Makes sure the dropdown doesn't exceed the input's width */
-}
 
 .user-avatar {
   width: 24px;

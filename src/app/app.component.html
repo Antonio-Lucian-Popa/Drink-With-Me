@@ -19,7 +19,7 @@
         </div>
 
         <!-- search-component.html -->
-        <div class="hidden lg:flex relative mt-2 w-full max-w-xs">
+        <div class="hidden lg:block relative mt-2 w-full max-w-xs">
           <input type="search" placeholder="Search..." [formControl]="searchControl"
             class="block w-full rounded-md border-gray-300 pl-3 pr-4 py-1.5 text-sm text-gray-900 placeholder:text-gray-400 focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50">
           <div *ngIf="showDropdown && searchResults.length > 0"
