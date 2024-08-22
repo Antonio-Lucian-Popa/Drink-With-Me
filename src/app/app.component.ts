@@ -17,7 +17,7 @@ import { User } from './shared/interfaces/user';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
 
   @HostListener('document:click', ['$event'])
   onClick(event: Event): void {
@@ -50,26 +50,26 @@ export class AppComponent implements OnInit{
     private userService: UserService,
     private webSocketService: WebSocketService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-     // Get user ID from JWT
-  this.authService.getUserId().then(userId => {
-    if (userId) {
-      // Fetch user profile info using the user ID
-      this.userService.getUserProfileInfo(userId).subscribe(
-        userInfo => {
-          console.log('User Info:', userInfo);
-          this.user = userInfo; // Store the user info in a component variable
-        },
-        error => {
-          console.error('Failed to fetch user info:', error);
-        }
-      );
-    } else {
-      console.log('No user ID found. User might not be logged in.');
-    }
-  });
+    // Get user ID from JWT
+    this.authService.getUserId().then(userId => {
+      if (userId) {
+        // Fetch user profile info using the user ID
+        this.userService.getUserProfileInfo(userId).subscribe(
+          userInfo => {
+            console.log('User Info:', userInfo);
+            this.user = userInfo; // Store the user info in a component variable
+          },
+          error => {
+            console.error('Failed to fetch user info:', error);
+          }
+        );
+      } else {
+        console.log('No user ID found. User might not be logged in.');
+      }
+    });
 
     this.geolocationService.getCityAndCountry().then(
       location => {
@@ -91,27 +91,27 @@ export class AppComponent implements OnInit{
     this.updateLayout();
 
     this.searchControl.valueChanges
-    .pipe(
-      debounceTime(300), // Wait for 300ms pause in events
-      filter(term => term === '' || (term && term.length > 0 )), // Ensure non-empty or reset
-      switchMap(term => {
-        if (term) {
-          return this.userService.searchUsers(term);
+      .pipe(
+        debounceTime(300), // Wait for 300ms pause in events
+        filter(term => term === '' || (term && term.length > 0)), // Ensure non-empty or reset
+        switchMap(term => {
+          if (term) {
+            return this.userService.searchUsers(term);
+          } else {
+            // Immediately return an empty array when the term is empty
+            return of([]);
+          }
+        })
+      )
+      .subscribe((results: any[]) => {
+        if (results.length > 0) {
+          this.searchResults = results;
+          this.showDropdown = true;
         } else {
-          // Immediately return an empty array when the term is empty
-          return of([]);
+          this.showDropdown = false;
+          this.searchResults = [];
         }
-      })
-    )
-    .subscribe((results: any[]) => {
-      if (results.length > 0) {
-        this.searchResults = results;
-        this.showDropdown = true;
-      } else {
-        this.showDropdown = false;
-        this.searchResults = [];
-      }
-    });
+      });
 
     this.webSocketService.newNotifications.subscribe((notification: any) => {
       this.isNewNotifications = true;
@@ -140,7 +140,10 @@ export class AppComponent implements OnInit{
   openUserProfile(userId?: string): void {
     this.closeDropDownUser();
     this.searchControl.reset();
-    //this.router.navigate(['/user-profile',  userId ? userId : this.userInfo.id]);
+    const userIdToNavigate = userId ? userId : this.user ? this.user.id : null;
+    if (userIdToNavigate) {
+      this.router.navigate(['/user-profile', userIdToNavigate]);
+    }
   }
 
   closeDropDownUser(): void {

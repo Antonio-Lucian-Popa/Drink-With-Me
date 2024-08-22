@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CreatePostDialogComponent } from './create-post-dialog/create-post-dialog.component';
 import { UserService } from '../../services/user.service';
@@ -13,12 +13,12 @@ import { UserPost } from '../../interfaces/post';
 })
 export class PostCreateInputComponent {
 
-  user!: UserPost;
+  @Input() user!: UserPost;
 
   constructor(public dialog: MatDialog, private userService: UserService) { }
 
   ngOnInit(): void {
-    this.fetchUserDetails();
+  //  this.fetchUserDetails();
   }
 
   fetchUserDetails() {
@@ -38,12 +38,12 @@ export class PostCreateInputComponent {
     // }).catch(error => {
     //   console.error('Error during user detail fetch operation:', error);
     // });
-    this.user = {
+   /*  this.user = {
       id: '1',
       firstName: 'Adrian',
       lastName: 'Lupu',
       profileImageUrl: 'https://randomuser.me/api/portraits/men/32.jpg'
-    }
+    } */
   }
 
   openDialog(): void {

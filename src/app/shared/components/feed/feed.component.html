@@ -1,2 +1,34 @@
-<app-post-create-input></app-post-create-input>
-<app-post-list></app-post-list>
+@if (user) {
+<app-post-create-input [user]="user"></app-post-create-input>
+
+
+<div class="max-w-2xl mx-auto mt-8 mb-4 text-center">
+  <!-- Title -->
+  <h2 class="text-xl font-semibold text-gray-700 mb-4">Filter Posts by Location</h2>
+  <p class="text-sm text-gray-500 mb-6">Select your county and city to see relevant posts in your area.</p>
+
+  <!-- Filters Form -->
+  <form class="md:flex md:justify-between items-center justify-center" [formGroup]="countyForm">
+    <!-- County Select -->
+    <div class="w-full md:w-[48%] md:mt-0">
+      <select id="county_select" formControlName="county"
+        class="block w-full py-2.5 px-4 text-sm text-gray-700 bg-white border-b-2 border-gray-300 focus:border-gray-500 focus:outline-none rounded-md shadow-sm">
+        <option value="" disabled selected>Choose a county</option>
+        <option [value]="county.id" *ngFor="let county of counties">{{county.name}}</option>
+      </select>
+    </div>
+
+    <!-- City Select -->
+    <div class="w-full md:w-[48%] sm:mt-4 md:mt-0 lg:mt-0">
+      <select id="city_select" formControlName="city" [disabled]="!cities || cities.length === 0"
+        class="block w-full py-2.5 px-4 text-sm text-gray-700 bg-white border-b-2 border-gray-300 focus:border-gray-500 focus:outline-none rounded-md shadow-sm">
+        <option value="" disabled selected>Choose a city</option>
+        <option [value]="city.id" *ngFor="let city of cities">{{city.name}}</option>
+      </select>
+    </div>
+
+  </form>
+</div>
+
+<app-post-list [userId]="user.id" [includeFollowers]="true" [county]="selectedCounty" [city]="selectedCity"></app-post-list>
+}

@@ -1,11 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GeolocationService {
+
+  URL_LINK = environment.apiUrl + '/api/v1';
 
   userAddress: any = {};
 
@@ -38,5 +41,15 @@ export class GeolocationService {
         reject('Geolocation is not supported by this browser.');
       }
     });
+  }
+
+  getCounty(): Observable<any> {
+    const url = `${this.URL_LINK}/locations/counties`;
+    return this.http.get(url);
+  }
+
+  getLocation(countyId: string): Observable<any> {
+    const url = `${this.URL_LINK}/locations/by-county/${countyId}`;
+    return this.http.get(url);
   }
 }

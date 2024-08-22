@@ -5,6 +5,8 @@ import { Observable, Subject } from 'rxjs';
 import {v4 as uuidv4} from 'uuid';
 import { PaginatedPostImages } from '../interfaces/post-image';
 import { PostDto } from '../interfaces/post-dto';
+import { Page } from '../interfaces/page';
+import { Post } from '../interfaces/post';
 
 @Injectable({
   providedIn: 'root'
@@ -119,6 +121,26 @@ export class PostService {
     params = params.append('includeFollowing', includeFollowing.toString());
 
     return this.http.get(url, { params: params });
+  }
+
+
+   /**
+   * Fetch posts by county and city.
+   *
+   * @param countyId UUID of the county
+   * @param cityId UUID of the city
+   * @param page Page number for pagination
+   * @param size Number of items per page
+   * @returns Observable of paginated posts
+   */
+   getPostsByLocation(userId: string, countyId: string, cityId: string, page: number = 0, size: number = 10): Observable<Page<Post>> {
+    let params = new HttpParams()
+      .set('countyId', countyId)
+      .set('cityId', cityId)
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<Page<Post>>(`${this.URL_LINK}/posts/findAllPosts/${userId}`, { params });
   }
 
   getPopularImages(page: number, size: number): Observable<PaginatedPostImages> {
