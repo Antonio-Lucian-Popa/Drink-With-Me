@@ -26,8 +26,14 @@ export class UserService {
     });
   }
 
-  getUserProfileInfo(userId: string): Observable<any> {
-    return this.http.get<any>(`${this.URL_LINK}/users/${userId}`).pipe(
+  getUserProfileInfo(profileUserId: string, userId?: string): Observable<any> {
+    let url = `${this.URL_LINK}/users/${profileUserId}`;
+
+    // Only append currentUserId if it's provided
+    if (userId) {
+      url += `/${userId}`;
+    }
+    return this.http.get<any>(`${url}`).pipe(
       tap((userInfo) => {
         if (this.userId === userInfo.id) {
           this.userInfo = userInfo;

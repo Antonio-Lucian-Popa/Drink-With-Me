@@ -23,7 +23,6 @@ export class UserProfileComponent {
 
   isUserProfile = false;
 
-  isUserFollowing = false;
 
   constructor(private route: ActivatedRoute, private userService: UserService, public dialog: MatDialog, private postService: PostService, private authService: AuthService) { }
 
@@ -45,16 +44,17 @@ export class UserProfileComponent {
   }
 
   loadUserInfo(userId: string): void {
-    this.userService.getUserProfileInfo(userId).subscribe({
+   if(this.currentUserId && userId) {
+    this.userService.getUserProfileInfo(this.currentUserId, userId).subscribe({
       next: (data) => {
         this.user = data;
         this.isUserProfile = this.userId == data.id;
-        this.user.followers.find((follower) => follower.id === this.userId) ? this.isUserFollowing = true : this.isUserFollowing = false;
       },
       error: (error) => {
         console.error('Error fetching user profile data:', error);
       }
     });
+   }
   }
 
   follow(): void {
@@ -62,12 +62,12 @@ export class UserProfileComponent {
       this.userService.followUser(this.currentUserId, this.userId).subscribe({
         next: (data) => {
           console.log('Followed user:', data);
-          this.isUserFollowing = true;
+          this.user.following = true;
           if(this.userId) this.loadUserInfo(this.userId);
         },
         error: (error) => {
           console.error('Error following user:', error);
-          this.isUserFollowing = false;
+          this.user.following = false;
         }
       });
     }
@@ -78,12 +78,12 @@ export class UserProfileComponent {
       this.userService.unfollowUser(this.currentUserId, this.userId).subscribe({
         next: (data) => {
           console.log('Followed user:', data);
-          this.isUserFollowing = false;
+          this.user.following = false;
           if(this.userId) this.loadUserInfo(this.userId);
         },
         error: (error) => {
           console.error('Error following user:', error);
-          this.isUserFollowing = true;
+          this.user.following = true;
         }
       });
     }

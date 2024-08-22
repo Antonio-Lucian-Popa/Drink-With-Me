@@ -12,9 +12,10 @@ export interface UserInformation {
   birthday: string;
   gender: Gender;
   occupation: string;
-  following: User[];
-  followers: User[];
+  followingCount: number;
+  followersCount: number;
   livesIn: string;
+  following: boolean;
 }
 
 export enum Gender {

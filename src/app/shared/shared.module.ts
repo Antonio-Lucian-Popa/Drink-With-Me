@@ -13,6 +13,7 @@ import { NotificationCardComponent } from './components/notification-card/notifi
 import { CreatePostDialogComponent } from './components/post-create-input/create-post-dialog/create-post-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditProfileComponent } from '../features/components/settings/edit-profile/edit-profile.component';
+import { AbbreviateNumberPipe } from './pipe/abbreviate-number.pipe';
 
 const NB_COMPONENTS: any[] = [
   PostCreateInputComponent,
@@ -39,8 +40,9 @@ const NB_MODULES: any[] = [
   imports: [
     CommonModule,
     ...NB_MODULES,
-    TimeAgoPipe
+    TimeAgoPipe,
+    AbbreviateNumberPipe
 ],
-  exports: [...NB_COMPONENTS, ...NB_MODULES, TimeAgoPipe]
+  exports: [...NB_COMPONENTS, ...NB_MODULES, TimeAgoPipe, AbbreviateNumberPipe]
 })
 export class SharedModule { }
