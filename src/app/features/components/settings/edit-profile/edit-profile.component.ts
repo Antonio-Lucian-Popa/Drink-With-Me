@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UserService } from '../../../../shared/services/user.service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -7,18 +8,39 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './edit-profile.component.html',
   styleUrl: './edit-profile.component.scss'
 })
-export class EditProfileComponent {
+export class EditProfileComponent implements OnInit {
 
   profileForm: FormGroup;
   profileImagePreview: string | ArrayBuffer = 'https://via.placeholder.com/150';
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private userService: UserService) {
     this.profileForm = this.fb.group({
       profileImage: [null],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       occupation: [''],
       birthday: ['', [Validators.required, this.ageValidator]]
+    });
+  }
+
+  ngOnInit(): void {
+    const userId = this.userService.userId;
+    // Fetch user profile information
+    this.userService.getUserProfileInfo(userId).subscribe((userInfo) => {
+      console.log(userInfo);
+      // Convert the birthday to yyyy-MM-dd format
+      const birthday = new Date(userInfo.birthday);
+      const formattedBirthday = birthday.toISOString().split('T')[0]; // yyyy-MM-dd
+      console.log(formattedBirthday);
+      this.profileForm.patchValue({
+        firstName: userInfo.firstName,
+        lastName: userInfo.lastName,
+        occupation: userInfo.occupation,
+        birthday: formattedBirthday
+      });
+      this.userService.getProfileImageAsBase64(userId).subscribe((avatar) => {
+        this.profileImagePreview = avatar;
+      });
     });
   }
 
