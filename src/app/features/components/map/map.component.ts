@@ -2,6 +2,8 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 import { Place } from '../../../shared/interfaces/place';
 import { PlaceService } from '../../../shared/services/place.service';
+import { FormControl } from '@angular/forms';
+import { Observable, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-map',
@@ -10,6 +12,10 @@ import { PlaceService } from '../../../shared/services/place.service';
   styleUrl: './map.component.scss'
 })
 export class MapComponent implements OnInit {
+
+  searchControl: FormControl = new FormControl();
+  places$!: Observable<Place[]>;
+
   private map!: L.Map;
   private userMarker!: L.Marker;
   private placesLayerGroup = L.layerGroup();
@@ -22,6 +28,24 @@ export class MapComponent implements OnInit {
     this.initializeMap();
     this.getUserLocation();
     this.isLoading = false;
+
+     // Set up the search with debounce
+     this.places$ = this.searchControl.valueChanges.pipe(
+      debounceTime(300), // Wait for 300ms pause in events
+      distinctUntilChanged(), // Only emit if value is different from before
+      switchMap((query) => this.placeService.searchPlaces(query)) // Switch to new search observable
+    );
+
+    // Subscribe to search results and update the map
+    this.places$.subscribe((places) => {
+      this.placesLayerGroup.clearLayers();
+        places.forEach((place) => {
+          const marker = L.marker([place.location.latitude, place.location.longitude])
+            .addTo(this.placesLayerGroup)
+            .bindPopup(`<b>${place.name}</b><br>${place.location.street}`);
+        });
+        this.placesLayerGroup.addTo(this.map);
+    });
   }
 
   private initializeMap(): void {
@@ -72,21 +96,4 @@ export class MapComponent implements OnInit {
     );
 }
 
-
-  searchPlaces(query: any): void {
-    this.placeService.searchPlaces(query.target.value).subscribe(
-      (places) => {
-        this.placesLayerGroup.clearLayers();
-        places.forEach((place) => {
-          const marker = L.marker([place.location.latitude, place.location.longitude])
-            .addTo(this.placesLayerGroup)
-            .bindPopup(`<b>${place.name}</b><br>${place.location.street}`);
-        });
-        this.placesLayerGroup.addTo(this.map);
-      },
-      (error) => {
-        console.error('Error searching places', error);
-      }
-    );
-  }
   }

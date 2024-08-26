@@ -3,7 +3,7 @@
   <div class="w-full">
     <input
       type="text"
-      (input)="searchPlaces($event)"
+      [formControl]="searchControl"
       placeholder="Search places..."
       class="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
     >
