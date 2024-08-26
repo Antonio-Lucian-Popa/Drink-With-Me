@@ -109,7 +109,7 @@
       <!-- Sidebar -->
       @if (showSidebarAndNavbar) {
       <aside [class.hidden]="!sidebarOpen"
-        class="w-64 side-nav lg:block lg:flex-shrink-0 fixed lg:static top-16 lg:top-0 left-0 lg:left-auto h-full lg:h-screen z-40 transform lg:transform-none transition-transform duration-300 ease-in-out bg-white">
+        class="w-64 side-nav lg:block lg:flex-shrink-0 fixed lg:static top-16 lg:top-0 left-0 lg:left-auto h-full lg:h-screen z-40 transform lg:transform-none transition-transform duration-300 ease-in-out bg-white add-z-index">
         <div class="h-full flex flex-col justify-between py-4">
           <!-- Navigation Links -->
           <nav class="space-y-1">
@@ -118,7 +118,11 @@
               <i class="fa-solid fa-house mr-3"></i>
               Feed
             </a>
-            <!-- Additional nav links -->
+            <a routerLink="/map" routerLinkActive="active"
+              class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200 no-underline cursor-pointer">
+              <i class="fa-solid fa-map-location-dot mr-3"></i>
+              Map
+            </a>
           </nav>
 
           <!-- Settings and Copyright -->

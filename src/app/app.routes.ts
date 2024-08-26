@@ -11,6 +11,10 @@ export const routes: Routes = [
     loadChildren: () => import('./features/components/settings/settings.module').then(m => m.SettingsModule)
   },
   {
+    path: 'map',
+    loadChildren: () => import('./features/components/map/map.module').then(m => m.MapModule)
+  },
+  {
     path: 'sign-up',
     loadChildren: () => import('./features/components/sign-up/sign-up.module').then(m => m.SignUpModule)
   },

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../auth/services/auth.service';
 import { Router } from '@angular/router';
+import { FacebookLoginProvider } from 'angularx-social-login';
 
 @Component({
   selector: 'app-sign-in',
@@ -36,6 +37,20 @@ export class SignInComponent {
       })
     }
   }
+
+  // signInWithFB(): void {
+  //   this.authService.signIn(FacebookLoginProvider.PROVIDER_ID).then(user => {
+  //     // Send token to your backend
+  //     this.http.post('your-backend-url', { token: user.authToken }).subscribe((response: any) => {
+  //       if (response.needsProfileCompletion) {
+  //         this.router.navigate(['/complete-profile']);
+  //       } else {
+  //         this.router.navigate(['/dashboard']);
+  //       }
+  //     });
+  //   });
+
+  // }
 
   isInvalid(controlName: string): boolean {
     const control = this.loginForm.get(controlName);

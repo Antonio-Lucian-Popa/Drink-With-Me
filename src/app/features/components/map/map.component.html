@@ -1,0 +1,19 @@
+<div class="relative flex flex-col space-y-2">
+  <!-- Search Input -->
+  <div class="w-full">
+    <input
+      type="text"
+      (input)="searchPlaces($event)"
+      placeholder="Search places..."
+      class="w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+    >
+  </div>
+
+  <!-- Loading Skeleton -->
+  <div *ngIf="isLoading" class="absolute inset-0 flex items-center justify-center bg-gray-200 animate-pulse">
+    <div class="w-full h-full bg-gray-300 rounded-lg"></div>
+  </div>
+
+  <!-- Map Container -->
+  <div id="map" class="w-full mt-3 h-80 md:h-96 rounded-lg shadow-lg overflow-hidden"></div>
+</div>

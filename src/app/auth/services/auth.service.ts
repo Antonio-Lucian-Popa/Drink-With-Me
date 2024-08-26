@@ -6,6 +6,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { jwtDecode } from "jwt-decode";
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { CreateUser } from '../../shared/interfaces/create-user';
+import { Router } from '@angular/router';
 
 export interface Token {
   token: string;
@@ -21,7 +22,7 @@ export class AuthService {
 
   private jwtHelper = new JwtHelperService();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   login(payload: any): Observable<Token | null> {
     return this.http.post<Token>(`${this.URL_LINK}/auth/login`, payload).pipe(
@@ -97,6 +98,7 @@ export class AuthService {
     );
   }
 
+
   logout(): Observable<any> {
     return this.http.post<any>(`${this.URL_LINK}/auth/logout`, {}).pipe(
       tap(() => {
@@ -112,6 +114,28 @@ export class AuthService {
       catchError(this.handleError)
     );
   }
+
+  // loginWithFacebook(): Observable<any> {
+  //   return this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID).pipe(
+  //     switchMap((socialUser: SocialUser) => {
+  //       return this.http.post<any>(`${this.URL_LINK}/facebook`, { authToken: socialUser.authToken }).pipe(
+  //         tap(response => {
+  //           localStorage.setItem('jwt', response.token); // Stochează tokenul JWT
+  //           if (response.needsProfileCompletion) {
+  //             this.router.navigate(['/complete-profile']);
+  //           } else {
+  //             this.router.navigate(['/home']);
+  //           }
+  //         }),
+  //         catchError(error => {
+  //           console.error('Login with Facebook failed:', error);
+  //           return of(null); // În cazul unei erori, returnează null
+  //         })
+  //       );
+  //     })
+  //   );
+  // }
+
 
   private handleError(error: HttpErrorResponse) {
     // Handle the error according to your application's needs

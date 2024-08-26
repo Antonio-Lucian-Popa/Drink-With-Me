@@ -9,11 +9,13 @@ import { UserService } from './shared/services/user.service';
 import { WebSocketService } from './shared/components/notification-card/services/web-socket.service';
 import { AuthService } from './auth/services/auth.service';
 import { User } from './shared/interfaces/user';
+import { SocialLoginModule } from 'angularx-social-login';
+import { MapModule } from './features/components/map/map.module';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SharedModule, RouterModule, CommonModule],
+  imports: [RouterOutlet, SharedModule, RouterModule, CommonModule, SocialLoginModule, MapModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
